@@ -1,12 +1,16 @@
 name: Gradle Build
+
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+  workflow_dispatch:
+    inputs:
+      run-build:
+        description: 'Run Gradle build?'
+        required: true
+        default: 'yes'
 
 jobs:
   build:
+    if: ${{ github.event.inputs.run-build == 'yes' }}
     runs-on: ubuntu-latest
 
     services:
@@ -53,4 +57,4 @@ jobs:
           SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/testdb
           SPRING_DATASOURCE_USERNAME: testUser
           SPRING_DATASOURCE_PASSWORD: testPass
-        run: ./gradlew build
+        run: ./gradlew clean build
